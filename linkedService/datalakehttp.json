@@ -1,0 +1,12 @@
+{
+	"name": "datalakehttp",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://netflixstorag.dfs.core.windows.net/",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQEU0M0IzNkY2LTYyMTEtNDcyRS05NkEyLTg5MzU5QkVGMzk3NF8yNWZiMWJlZC1jNGY1LTRiNjMtODg4NC0zYjg4NWQ5MjU5MmIiDQp9"
+		}
+	}
+}
