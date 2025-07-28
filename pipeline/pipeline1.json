@@ -15,6 +15,11 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.p_array",
+						"type": "Expression"
+					},
+					"isSequential": true,
 					"activities": [
 						{
 							"name": "Copy data1",
@@ -63,13 +68,29 @@
 							"inputs": [
 								{
 									"referenceName": "ds_github_data",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"file_name": {
+											"value": "@item().file_name",
+											"type": "Expression"
+										}
+									}
 								}
 							],
 							"outputs": [
 								{
 									"referenceName": "ds_sink",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"folder_name": {
+											"value": "@item().folder_name",
+											"type": "Expression"
+										},
+										"file_name": {
+											"value": "@item().file_name",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
@@ -133,7 +154,7 @@
 				"typeProperties": {
 					"variableName": "githubData",
 					"value": {
-						"value": "@activity('GitMata Data').output",
+						"value": "@activity('GitMata Data').output.Response",
 						"type": "Expression"
 					}
 				}
