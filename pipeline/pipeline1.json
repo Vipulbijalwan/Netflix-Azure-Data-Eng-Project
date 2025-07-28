@@ -5,9 +5,14 @@
 			{
 				"name": "ForEach",
 				"type": "ForEach",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Validation Github",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"activities": [
@@ -74,7 +79,14 @@
 			{
 				"name": "Validation Github",
 				"type": "Validation",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
@@ -83,6 +95,47 @@
 					},
 					"timeout": "0.12:00:00",
 					"sleep": 10
+				}
+			},
+			{
+				"name": "GitMata Data",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"url": "https://raw.githubusercontent.com/Vipulbijalwan/Netflix_Azure_Data_Engineering_Project/refs/heads/main/RawData_AND_Notebooks/netflix_cast.csv"
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "GitMata Data",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "githubData",
+					"value": {
+						"value": "@activity('GitMata Data').output",
+						"type": "Expression"
+					}
 				}
 			}
 		],
@@ -107,6 +160,11 @@
 						"file_name": "netflix_directors.csv"
 					}
 				]
+			}
+		},
+		"variables": {
+			"githubData": {
+				"type": "String"
 			}
 		},
 		"annotations": []
