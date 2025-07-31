@@ -1,0 +1,9 @@
+{
+	"name": "netflix-df-vipul",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "42b6b2a4-330a-47a0-8c15-2bf81f0d4b5f",
+		"tenantId": "03b17786-6d87-4826-b8a4-87956dfa4ad5"
+	}
+}
