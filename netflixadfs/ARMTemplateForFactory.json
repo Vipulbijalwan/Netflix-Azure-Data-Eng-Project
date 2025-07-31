@@ -33,11 +33,21 @@
 					{
 						"name": "ForEach",
 						"type": "ForEach",
-						"state": "Inactive",
-						"onInactiveMarkAs": "Succeeded",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Validation Github",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
 						"userProperties": [],
 						"typeProperties": {
+							"items": {
+								"value": "@pipeline().parameters.p_array",
+								"type": "Expression"
+							},
+							"isSequential": true,
 							"activities": [
 								{
 									"name": "Copy data1",
@@ -87,14 +97,28 @@
 										{
 											"referenceName": "ds_github_data",
 											"type": "DatasetReference",
-											"parameters": {}
+											"parameters": {
+												"file_name": {
+													"value": "@item().file_name",
+													"type": "Expression"
+												}
+											}
 										}
 									],
 									"outputs": [
 										{
 											"referenceName": "ds_sink",
 											"type": "DatasetReference",
-											"parameters": {}
+											"parameters": {
+												"folder_name": {
+													"value": "@item().folder_name",
+													"type": "Expression"
+												},
+												"file_name": {
+													"value": "@item().file_name",
+													"type": "Expression"
+												}
+											}
 										}
 									]
 								}
@@ -104,7 +128,14 @@
 					{
 						"name": "Validation Github",
 						"type": "Validation",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
 						"userProperties": [],
 						"typeProperties": {
 							"dataset": {
@@ -117,7 +148,7 @@
 						}
 					},
 					{
-						"name": "Web1",
+						"name": "GitMata Data",
 						"type": "WebActivity",
 						"dependsOn": [],
 						"policy": {
@@ -129,7 +160,33 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"headers": {}
+							"method": "GET",
+							"headers": {},
+							"url": "https://raw.githubusercontent.com/Vipulbijalwan/Netflix_Azure_Data_Engineering_Project/refs/heads/main/RawData_AND_Notebooks/netflix_cast.csv"
+						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "GitMata Data",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "githubData",
+							"value": {
+								"value": "@activity('GitMata Data').output.Response",
+								"type": "Expression"
+							}
 						}
 					}
 				],
@@ -157,6 +214,11 @@
 								"file_name": "netflix_directors.csv"
 							}
 						]
+					}
+				},
+				"variables": {
+					"githubData": {
+						"type": "String"
 					}
 				},
 				"annotations": []
